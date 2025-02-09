@@ -1,6 +1,7 @@
 // login_screen.dart
 import 'package:flutter/material.dart';
 import 'package:minner/core/widgets/custom_textfield.dart';
+import 'package:minner/features/register/controllers/register_controller.dart';
 
 class RegisterScreen extends StatelessWidget {
    RegisterScreen({Key? key}) : super(key: key);

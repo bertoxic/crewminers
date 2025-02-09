@@ -22,7 +22,7 @@ class LoginController {
 
   }
 
-  Future<bool> login(BuildContext context) async {
+  Future<ResponseResult> login(BuildContext context) async {
     final email = emailController.text.trim();
     final password = passwordController.text.trim();
 
@@ -31,23 +31,27 @@ class LoginController {
 
     if (user.validateCredentials()) {
       // Call AuthProvider's login method
-      final response = await authProvider.login(context, user);
+      ResponseResult response = await authProvider.login(context, user);
 
       if (response.status == ResponseStatus.success) {
-        return true;
-      } else {
+        CustomPopup.show(context: context, type: PopupType.success, title: "Login Successful", message: response.message);
+
+        return response;      } else {
         // Show error popup or snack bar
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(response.message)),
         );
-        return false;
+        CustomPopup.show(context: context,type: PopupType.error, title: "Login failed", message: response.message);
+        return ResponseResult(status: response.status, message: response.message, data: response.data);
       }
     } else {
       // Show invalid credentials message
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Invalid Credentials')),
       );
-      return false;
+      CustomPopup.show(context: context, type:PopupType.error ,title: "Login failed", message: "invalid details");
+
+      return  ResponseResult(status: ResponseStatus.failed, message:"invalid details",);
     }
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:minner/core/models/Response_models.dart';
 import 'package:minner/core/utils/responsive/responsivex_size.dart';
 import 'package:minner/core/widgets/custom_textfield.dart';
 import 'package:minner/features/login/controllers/login_controller.dart';
@@ -297,7 +298,7 @@ class SignInButton extends StatelessWidget {
         onPressed: () async {
           if (formKey.currentState?.validate() ?? false) {
             final success = await loginController.login(context);
-            if (success && context.mounted) {
+            if (success.status == ResponseStatus.success && context.mounted) {
               // Navigate to home screen or dashboard
               Navigator.pushReplacementNamed(context, '/home');
             }
