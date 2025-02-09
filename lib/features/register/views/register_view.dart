@@ -17,11 +17,11 @@ class RegisterScreen extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 40.0),
               child: Column(
-                children: const [
-                  LogoHeader(),
+                children:  [
+                  const LogoHeader(),
                   SizedBox(height: 40),
-                  SignUpCard(),
-                  SizedBox(height: 24),
+                  SignUpCard(controllerReg: _registerController, formKey: _formKey,),
+                  const SizedBox(height: 24),
                   SignInLink(),
                 ],
               ),
@@ -74,7 +74,9 @@ class LogoHeader extends StatelessWidget {
 }
 
 class SignUpCard extends StatelessWidget {
-  const SignUpCard({Key? key}) : super(key: key);
+  final RegisterController controllerReg;
+  final GlobalKey<FormState> formKey;
+   SignUpCard({Key? key, required this.controllerReg, required this.formKey}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -83,10 +85,10 @@ class SignUpCard extends StatelessWidget {
       decoration: CardDecoration.defaultDecoration,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
+        children:  [
           SignUpHeader(),
           SizedBox(height: 32),
-          SignUpForm(),
+          SignUpForm(registerController: controllerReg, formKey: formKey,),
         ],
       ),
     );
@@ -137,55 +139,72 @@ class SignUpHeader extends StatelessWidget {
 }
 
 class SignUpForm extends StatelessWidget {
-  const SignUpForm({Key? key}) : super(key: key);
+  final RegisterController registerController;
+  final GlobalKey<FormState> formKey;
+   SignUpForm({Key? key, required this.registerController, required this.formKey}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        FormInput(
-          hintText: 'First Name',
-          icon: Icons.person_outline,
-          fieldName: 'first_name',
-        ),
-        const SizedBox(height: 16),
-        FormInput(
-          hintText: 'Last Name',
-          icon: Icons.email_outlined,
-          fieldName: 'last_name',
-        ),  const SizedBox(height: 16),
-        FormInput(
-          hintText: 'User Name',
-          icon: Icons.email_outlined,
-          fieldName: 'Use_name',
-        ),  const SizedBox(height: 16),
-        FormInput(
-          hintText: 'Phone',
-          icon: Icons.email_outlined,
-          fieldName: 'phone',
-        ),  const SizedBox(height: 16),
-        FormInput(
-          hintText: 'Email',
-          icon: Icons.email_outlined,
-          fieldName: 'email',
-        ),
-        const SizedBox(height: 16),
-        FormInput(
-          hintText: 'Password',
-          icon: Icons.lock_outline,
-          fieldName: 'password',
-          isPassword: true,
-        ),
-        const SizedBox(height: 16),
-        FormInput(
-          hintText: 'Confirm Password',
-          icon: Icons.lock_outline,
-          fieldName: 'confirm_password',
-          isPassword: true,
-        ),
-        const SizedBox(height: 32),
-        const SignUpButton(),
-      ],
+    return Form(
+      key: formKey,
+      child: Column(
+
+        children: [
+          FormInput(
+            registerController: registerController.firstNameController,
+            hintText: 'First Name',
+            icon: Icons.person_outline,
+            fieldName: 'first_name',
+          ),
+          const SizedBox(height: 16),
+          FormInput(
+            registerController: registerController.lastNameController,
+            hintText: 'Last Name',
+            icon: Icons.email_outlined,
+            fieldName: 'last_name',
+          ),  const SizedBox(height: 16),
+          FormInput(
+            registerController: registerController.userNameController,
+            hintText: 'User Name',
+            icon: Icons.email_outlined,
+            fieldName: 'Use_name',
+          ),  const SizedBox(height: 16),
+          FormInput(
+            registerController: registerController.phoneNumberController,
+            hintText: 'Phone',
+            icon: Icons.email_outlined,
+            fieldName: 'phone',
+          ),  const SizedBox(height: 16),
+          FormInput(
+            registerController: registerController.emailController,
+            hintText: 'Email',
+            icon: Icons.email_outlined,
+            fieldName: 'email',
+          ),
+          const SizedBox(height: 16),
+          FormInput(
+            registerController: registerController.passwordController,
+            hintText: 'Password',
+            icon: Icons.lock_outline,
+            fieldName: 'password',
+            isPassword: true,
+          ),
+          const SizedBox(height: 16),
+          FormInput(
+            registerController: registerController.confirmPasswordController,
+
+            hintText: 'Confirm Password',
+            icon: Icons.lock_outline,
+            fieldName: 'confirm_password',
+            isPassword: true,
+          ),
+          const SizedBox(height: 32),
+          SignUpButton(
+            regController: registerController,
+            formKey: formKey,
+          ),
+        ],
+      ),
     );
   }
 }
@@ -195,18 +214,21 @@ class FormInput extends StatelessWidget {
   final IconData icon;
   final String fieldName;
   final bool isPassword;
+  final TextEditingController registerController;
 
   const FormInput({
     Key? key,
     required this.hintText,
     required this.icon,
     required this.fieldName,
+    required this.registerController,
     this.isPassword = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return CustomTextField(
+      controller: registerController,
       obscureText: isPassword,
       decoration: InputDecoration(
         hintText: hintText,
@@ -224,7 +246,8 @@ class FormInput extends StatelessWidget {
 }
 
 class SignUpButton extends StatelessWidget {
-  const SignUpButton({Key? key}) : super(key: key);
+  final RegisterController regController;
+  const SignUpButton({super.key, required  this.regController, required GlobalKey<FormState> formKey});
 
   @override
   Widget build(BuildContext context) {
@@ -232,7 +255,9 @@ class SignUpButton extends StatelessWidget {
       width: double.infinity,
       height: 56,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () {
+          regController.register(context,);
+        },
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color(0xFFFF7B54),
           shape: RoundedRectangleBorder(

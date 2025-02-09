@@ -20,7 +20,7 @@ class RegisterController extends ChangeNotifier{
 
   RegisterController(){
     authService = AuthService(); // Initialize AuthService
-    authProvider = authProvider;
+    authProvider = AuthProvider.create(authService);
   }
 
   void dispose(){
@@ -49,18 +49,18 @@ class RegisterController extends ChangeNotifier{
       ResponseResult response = await authProvider.register(context, user);
 
       if (response.status == ResponseStatus.success) {
-        CustomPopup.show(context: context, type: PopupType.success, title: "Login Successful", message: response.message);
+        CustomPopup.show(context: context, type: PopupType.success, title: "Registration Successful", message: response.message);
 
         return response;      } else {
         // Show error popup or snack bar
 
-        CustomPopup.show(context: context,type: PopupType.error, title: "Login failed", message: response.message);
+        CustomPopup.show(context: context,type: PopupType.error, title: "Registration failed", message: response.message);
         return ResponseResult(status: response.status, message: response.message, data: response.data);
       }
     } else {
       // Show invalid credentials message
 
-      CustomPopup.show(context: context, type:PopupType.error ,title: "Login failed", message: "invalid details");
+      CustomPopup.show(context: context, type:PopupType.error ,title: "Register failed", message: "invalid details");
 
       return  ResponseResult(status: ResponseStatus.failed, message:"invalid details",);
     }

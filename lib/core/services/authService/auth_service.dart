@@ -26,14 +26,14 @@ class AuthService {
   Future<Response> register(BuildContext context,RegisterDetails registerDetails) async {
     Map<String, dynamic> data = {
 
-        "firstName": registerDetails.firstname,
+        "firstname": registerDetails.firstname,
         "lastname": registerDetails.lastname,
         "username": registerDetails.username,
         "phone": registerDetails.phone,
         "email": registerDetails.email,
         "password": registerDetails.password
     };
-    final response = await apiService.post(context,"Authentication.php",data: data);
+    final response = await apiService.post(context,"createAccount.php",data: data);
     return response;
   }
 

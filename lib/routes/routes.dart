@@ -19,7 +19,7 @@ final  _rootNavigatorSettings = GlobalKey<NavigatorState>();
 
 
 final GoRouter _router= GoRouter(
-    initialLocation: '/home',
+    initialLocation: '/login',
     navigatorKey: _rootNavigatorKey,
     routes: <RouteBase>[
 
@@ -28,11 +28,11 @@ final GoRouter _router= GoRouter(
           branches:<StatefulShellBranch>[
             StatefulShellBranch(
                 navigatorKey: _rootNavigatorHome,
-                initialLocation: "/home",
+                initialLocation: "/login",
                 routes: [
                   GoRoute(
-                    path: '/home',
-                    name: 'home',
+                    path: '/login',
+                    name: 'login',
                     builder: (BuildContext context, GoRouterState state) {
                       return  SignInScreen();
 
@@ -83,8 +83,17 @@ final GoRouter _router= GoRouter(
 
                 ]),
           ]
-      )
+      ),
+      GoRoute(
+        path: '/homepage',
+        name: 'home',
+        builder: (BuildContext context, GoRouterState state) {
+          return   HomeScreen(
+            key: state.pageKey,
+          );
 
+        },
+      ),
     ]
 
 );

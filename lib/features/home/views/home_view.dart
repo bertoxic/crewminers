@@ -40,9 +40,8 @@ class _HomeScreenState extends State<HomeScreen>
           animation: _controller,
           builder: (context, child) {
             final rotation = _controller.value * 2 * pi;
-            return CustomPaint(
-              painter: FanPainter(rotation: rotation),
-              size: const Size(300, 300),
+            return Container(
+
             );
           },
         ),
