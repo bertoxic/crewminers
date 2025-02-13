@@ -47,6 +47,7 @@ dependencies:
   shimmer: ^3.0.0
   url_launcher: ^6.2.4
   animated_text_kit:
+  google_fonts: ^4.0.0
 
 
   # The following adds the Cupertino Icons font to your application.

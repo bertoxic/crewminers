@@ -101,7 +101,7 @@ class AuthProvider extends ChangeNotifier {
         final data = Map<String, dynamic>.from(response.data as Map<String, dynamic>);
 
         _token = data['token'];
-          SharedPreferencesUtil.saveString("authorization_token",_token);
+          SharedPreferencesUtil.saveString("auth_token",_token??"");
         notifyListeners();
         return ResponseResult(
           status: ResponseStatus.success,

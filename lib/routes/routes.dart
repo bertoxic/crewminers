@@ -89,7 +89,7 @@ final GoRouter _router= GoRouter(
         name: 'home',
         builder: (BuildContext context, GoRouterState state) {
           return   HomeScreen(
-            key: state.pageKey,
+           // key: state.pageKey,
           );
 
         },

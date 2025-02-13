@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:dio/io.dart'; // Import this for the HttpClientAdapter
 import 'package:logger/logger.dart';
+import 'package:minner/core/utils/shared_preference.dart';
 
 /// Custom exception class for API errors
 class ApiException implements Exception {
@@ -72,6 +73,10 @@ class ApiService {
   void _addInterceptors() {
     _dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {
+      var token = await   SharedPreferencesUtil.getString("auth_token");
+      if(token != null){
+        options.headers['Authorization'] = 'Bearer $token';
+      }
         _logRequest(options);
         // Add auth token handling here
         return handler.next(options);

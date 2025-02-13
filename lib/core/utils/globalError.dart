@@ -157,43 +157,98 @@ class CustomAlertDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      title: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
-          borderRadius: BorderRadius.circular(8),
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return TweenAnimationBuilder<double>(
+      duration: const Duration(milliseconds: 200),
+      tween: Tween(begin: 0.0, end: 1.0),
+      builder: (context, value, child) {
+        return Transform.scale(
+          scale: 0.5 + (0.5 * value),
+          child: Opacity(
+            opacity: value,
+            child: child,
+          ),
+        );
+      },
+      child: AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: BorderSide(
+            color: colorScheme.primary.withOpacity(0.1),
+            width: 1.5,
+          ),
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Text(
-                title,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontWeight: FontWeight.normal,
+        title: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          decoration: BoxDecoration(
+            color: colorScheme.primary.withOpacity(0.08),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: colorScheme.primary.withOpacity(0.2),
+              width: 1,
+            ),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    color: colorScheme.primary,
+                    letterSpacing: 0.3,
+                    height: 1.2,
+                  ),
                 ),
               ),
-            ),
-            Icon(icon, color: Theme.of(context).colorScheme.onPrimary),
-          ],
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: colorScheme.primary.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(
+                  icon,
+                  color: colorScheme.primary,
+                  size: 20,
+                ),
+              ),
+            ],
+          ),
         ),
+        contentPadding: const EdgeInsets.fromLTRB(24, 20, 24, 24),
+        content: Text(
+          message,
+          style: TextStyle(
+            color: colorScheme.onSurface.withOpacity(0.9),
+            height: 1.5,
+            letterSpacing: 0.2,
+          ),
+        ),
+        actions: actions ??
+            [
+              TextButton(
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text(
+                  'OK',
+                  style: TextStyle(
+                    color: colorScheme.primary,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+              ),
+            ],
+        backgroundColor: colorScheme.surface,
+        elevation: 0,
+        surfaceTintColor: Colors.transparent,
       ),
-      content: Text(
-        message,
-        style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
-      ),
-      actions: actions ??
-          [
-            TextButton(
-              child: Text('OK', style: TextStyle(color: Theme.of(context).colorScheme.primary)),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-          ],
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      elevation: 8,
     );
   }
 }

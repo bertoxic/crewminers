@@ -8,7 +8,7 @@ class UtilityProvider extends ChangeNotifier {
   set isCustomPopUp(bool value) {
     if (_isCustomPopUp != value) {
       _isCustomPopUp = value;
-      notifyListeners(); // Notify listeners about the change
+      notifyListeners();
     }
   }
 }
