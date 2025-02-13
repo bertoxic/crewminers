@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:minner/core/utils/responsive/responsive_sizes.dart';
+import 'package:minner/features/home/controllers/home_controller.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,7 +18,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-
+  late HomeViewController viewController;
   @override
   void initState() {
     super.initState();
@@ -32,6 +33,12 @@ class _HomeScreenState extends State<HomeScreen>
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  @override
+void didChangeDependencies() async{
+    viewController = await HomeViewController.create(context: context);
+    super.didChangeDependencies();
   }
 
   @override
