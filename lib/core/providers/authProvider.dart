@@ -35,7 +35,16 @@ class AuthProvider extends ChangeNotifier {
     try {
       // Call AuthService's login method
       Response response = await _authService.login(context, loginDetails.email, loginDetails.password);
+      SharedPreferencesUtil.remove("auth_token");
+      print("removed token>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 
+      final data = Map<String, dynamic>.from(response.data as Map<String, dynamic>);
+      _token = data['token'];
+
+      SharedPreferencesUtil.saveString("auth_token",_token??"");
+      notifyListeners();
+      String? tokenstored = await SharedPreferencesUtil.getString("auth_token") ;
+      print("obtained token>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> as ${tokenstored}");
       // Check for HTTP status and handle responses
       if (response.statusCode == 200) {
         // Parse and store the token or any relevant data

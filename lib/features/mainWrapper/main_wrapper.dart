@@ -47,6 +47,9 @@ class _MainPageWrapperState extends State<MainPageWrapper> with WidgetsBindingOb
   }
   // Improved initialization method with error handling
   Future<void> _initializeApp() async {
+    if (!mounted){
+
+    }
     setState(() {
       _isInitializing = true;
       _initializationError = null;
@@ -83,6 +86,7 @@ class _MainPageWrapperState extends State<MainPageWrapper> with WidgetsBindingOb
 
   // Custom error widget builder
   Widget _buildErrorWidget(FlutterErrorDetails details) {
+    if(!mounted) return const SizedBox.shrink();
     return Material(
       child: Center(
         child: Padding(
@@ -188,7 +192,7 @@ class _MainPageWrapperState extends State<MainPageWrapper> with WidgetsBindingOb
 
   Future<void> goToBranch(int index) async{
     widget.navigationShell.goBranch(index,
-    initialLocation: index ==widget.navigationShell.currentIndex
+    initialLocation: index == widget.navigationShell.currentIndex
     );
   }
 }

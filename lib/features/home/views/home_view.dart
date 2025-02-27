@@ -14,45 +14,117 @@ class HomeScreen extends StatefulWidget {
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
-
-class _HomeScreenState extends State<HomeScreen>
-    with SingleTickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  late HomeViewController viewController;
+  HomeViewController? viewController;
+  bool _isLoading = true;
+  String? _error;
+
   @override
   void initState() {
     super.initState();
-    // Create an AnimationController for continuous rotation.
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 2),
     )..repeat();
+
+    _initializeViewController();
+  }
+
+  Future<void> _initializeViewController() async {
+    try {
+      final controller = await HomeViewController.create(context: context);
+
+      if (!mounted) return;
+
+      setState(() {
+        viewController = controller;
+        _isLoading = false;
+        _error = controller == null ? "Failed to initialize" : null;
+      });
+    } catch (e) {
+      if (!mounted) return;
+
+      setState(() {
+        _isLoading = false;
+        _error = "Failed to load data";
+      });
+    }
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    viewController?.dispose();
     super.dispose();
   }
 
   @override
-void didChangeDependencies() async{
-    viewController = await HomeViewController.create(context: context);
-    super.didChangeDependencies();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator(color: Colors.grey,)),
+      );
+    }
+
+    if (_error != null || viewController == null) {
+      return Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(_error ?? "Unknown error occurred"),
+              ElevatedButton(
+                onPressed: _initializeViewController,
+                child: const Text("Retry"),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: Colors.grey.shade300,
-      appBar: AppBar(title:  const Text('Standing Fan Animation'), toolbarHeight: 30.h, titleSpacing: 30.h,),
-      body: EventCard(),
+      appBar: AppBar(
+        title: const Text('Home screen'),
+        toolbarHeight: 30.h,
+        titleSpacing: 30.h,
+      ),
+      body: Column(
+        children: [
+          _buildUserNameCard(),
+          EventCard(
+            data: viewController!.userDetails.userName ?? 'No email available',
+          ),
+        ],
+      ),
     );
   }
 }
 
+class _buildUserNameCard  extends StatelessWidget{
+  @override
+  Widget build(BuildContext context){
+    return ClipRect(
+
+      child: Container(
+        width: double.maxFinite,
+        decoration: const BoxDecoration(
+
+        ),
+      ),
+    );
+  }
+
+}
+
+
+
+
 class EventCard extends StatelessWidget {
-  const EventCard({Key? key}) : super(key: key);
+  final String data;
+   EventCard({ super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +195,8 @@ class EventCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        'Jun 9',
+                       // 'Jun 9',
+                        data??"juner",
                         style: GoogleFonts.poppins(
                           fontSize: 32,
                           fontWeight: FontWeight.bold,

@@ -1,14 +1,12 @@
 import 'package:flutter/foundation.dart';
 
 class UtilityProvider extends ChangeNotifier {
-  bool _isCustomPopUp = false;
+  bool _dropdownValue=false;
 
-  bool get isCustomPopUp => _isCustomPopUp;
+  bool get dropdownValue => _dropdownValue;
 
-  set isCustomPopUp(bool value) {
-    if (_isCustomPopUp != value) {
-      _isCustomPopUp = value;
-      notifyListeners();
-    }
+  void setDropdownValue(bool newValue) {
+    _dropdownValue = newValue;
+    notifyListeners();
   }
 }

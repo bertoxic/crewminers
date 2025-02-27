@@ -76,6 +76,7 @@ class ApiService {
       var token = await   SharedPreferencesUtil.getString("auth_token");
       if(token != null){
         options.headers['Authorization'] = 'Bearer $token';
+        options.headers['authorizationx'] = 'Bearer $token';
       }
         _logRequest(options);
         // Add auth token handling here
@@ -199,7 +200,7 @@ class ApiService {
 
 class AppApiConfig implements ApiServiceConfig {
   @override
-  String get baseUrl => 'http://crewminers.com/api/v1/';
+  String get baseUrl => 'https://crewminers.com/api/v1/';
 
   @override
   Duration get connectTimeout => const Duration(seconds: 5);

@@ -1,38 +1,62 @@
 
 
 import 'package:flutter/cupertino.dart';
+import 'package:minner/core/models/Response_models.dart';
 import 'package:minner/core/models/user_details.dart';
 import 'package:minner/core/providers/User_provider.dart';
 import 'package:minner/core/widgets/custom_pop_up.dart';
-
+// HomeViewController
 class HomeViewController {
   final UserDetails userDetails;
-  final UserDetailsProvider? userDetailsProvider;
+  final UserProvider userDetailsProvider;
 
-  // Private constructor
   HomeViewController._({
     required this.userDetails,
     required this.userDetailsProvider,
   });
 
-  // Factory constructor that handles async initialization
-  static Future<HomeViewController> create({
-    UserDetailsProvider? provider,
+  static Future<HomeViewController?> create({
+    UserProvider? provider,
     required BuildContext context,
   }) async {
-    final userDetailsProvider = provider ?? UserDetailsProvider();
+    if (!context.mounted) return null;
+
+    final userDetailsProvider = provider ?? UserProvider();
 
     try {
       final respResult = await userDetailsProvider.getUserDetails(context);
 
+      if (!context.mounted) return null;
+
+      if (respResult.status == ResponseStatus.failed ||
+          userDetailsProvider.userDetails == null) {
+        if (context.mounted) {
+          CustomPopup.show(
+              context: context,
+              title: "Failed to Load Page",
+              message: respResult.message
+          );
+        }
+        return null;
+      }
+
       return HomeViewController._(
-        userDetails: UserDetails.fromJSON(respResult.data),
+        userDetails: userDetailsProvider.userDetails!,
         userDetailsProvider: userDetailsProvider,
       );
     } catch (e) {
-      CustomPopup.show(context: context, title: "Failed to Load Page", message: "Something went wrong");
-      print('Error creating HomeViewController: $e');
-      rethrow;
+      if (context.mounted) {
+        CustomPopup.show(
+            context: context,
+            title: "Failed to Load Page",
+            message: e.toString()
+        );
+      }
+      return null;
     }
+  }
+
+  void dispose() {
+    userDetailsProvider.dispose();
   }
 }

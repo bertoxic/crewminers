@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:minner/app/themes/dark_theme.dart';
 import 'package:minner/app/themes/light_theme.dart';
+import 'package:minner/core/providers/User_provider.dart';
 import 'package:minner/core/providers/utility_provider.dart';
 import 'package:minner/core/services/authService/auth_service.dart';
 //import 'package:minner/core/utils/responsive/responsive_sizes.dart';
@@ -19,6 +20,7 @@ void main()async {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider.create(authService)),
         ChangeNotifierProvider(create: (_) => UtilityProvider()),
+        ChangeNotifierProvider(create: (_) => UserProvider()),
       ],
       child: const MyApp(),
     ),

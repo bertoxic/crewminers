@@ -17,11 +17,11 @@ class UserDetails{
 
   UserDetails.fromJSON(Map<String, dynamic>?js):
       userName = js?['username']??"",
-      firstName = js?['firstname'],
+      firstName = js?["firstname"],
       lastName = js?['lastname'],
       phone = js?['phone_number'],
       email = js?['email'],
-      walletAddress = js?['wallet_address'];
+      walletAddress = js?['wallet_address']{ print("zzzzzzzzzzzzzzzzzzzzzzzz $js");}
 
  Map<String, dynamic> toJson(){
     return <String, dynamic>{
